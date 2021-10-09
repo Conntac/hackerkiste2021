@@ -84,6 +84,18 @@ def create_user_for_session(session_id: str, user_name: str, db: Session = Depen
     return db_user
 
 
+@app.post("/session/{session_id}/finalize")
+def finalize_session(session_id: str, db: Session = Depends(get_db)):
+    session = crud.get_session(db, session_id)
+    if session is None:
+        raise HTTPException(status_code=404)
+
+    session.finalized = True
+    db.commit()
+
+    return session
+
+
 @app.get("/session/{session_id}/users", response_model=List[schemas.User])
 def read_users_for_session(session_id: str, db: Session = Depends(get_db)):
     return crud.get_users_for_session(db, session_id=session_id)

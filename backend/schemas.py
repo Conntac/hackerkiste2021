@@ -52,6 +52,7 @@ class Session(BaseModel):
     id: uuid.UUID
     menu: List[Dish] = []
     users: List[User] = []
+    finalized: bool
 
     class Config:
         orm_mode = True

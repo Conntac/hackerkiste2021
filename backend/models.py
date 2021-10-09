@@ -25,6 +25,7 @@ class Session(Base):
 
     id = Column(String(length=36), default=lambda: str(
         uuid.uuid4()), primary_key=True, index=True)
+    finalized = Column(Boolean)
 
     menu = relationship("Dish", back_populates="belongs_to")
     users = relationship("User", back_populates="in_session")
