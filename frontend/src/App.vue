@@ -9,7 +9,7 @@
 
       <v-spacer/>
 
-      <span>{{ username }}</span>
+      <span v-if="store.username !== ''">{{ store.username }}</span>
   </v-app-bar>
   <v-content>
     <router-view></router-view>
@@ -18,11 +18,15 @@
 </template>
 
 <script>
+import store from "./store"
+
 export default {
+
+
   name: "App",
   data () {
     return {
-      'username': "Username"
+      store
     }
   }
 };
