@@ -6,17 +6,20 @@ from database import Base
 
 
 class DishInfo(BaseModel):
-    __tablename__ = "dishinfos"
-
     text: str  # md
 
     class Config:
         orm_mode = True
 
 
-class DishExtra(BaseModel):
-    __tablename__ = "dishextras"
+class DishExtraCategory(BaseModel):
+    id: str
 
+    class Config:
+        orm_mode = True
+
+
+class DishExtra(BaseModel):
     id: str
     name: str
     price: int
@@ -26,8 +29,6 @@ class DishExtra(BaseModel):
 
 
 class Dish(BaseModel):
-    __tablename__ = "dishes"
-
     id: str
     name: str
     description: str

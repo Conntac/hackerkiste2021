@@ -46,7 +46,8 @@ class Dish(Base):
     belongs_to = relationship("Session", back_populates="menu")
     ordered_by = relationship("User", back_populates="orders")
     meal_info = relationship("DishInfo", back_populates="owner")
-    side_meal_categories = relationship("DishExtra", back_populates="owner")
+    side_meal_categories = relationship(
+        "DishExtraCategory", back_populates="owner")
 
 
 class DishInfo(Base):
@@ -58,6 +59,17 @@ class DishInfo(Base):
     owner = relationship("Dish", back_populates="meal_info")
 
 
+class DishExtraCategory(Base):
+    __tablename__ = "dishextracategories"
+
+    id = Column(String(length=36), default=lambda: str(
+        uuid.uuid4()), primary_key=True, index=True)
+    dish_id = Column(String(length=36), ForeignKey('dishes.id'))
+
+    owner = relationship("Dish", back_populates="side_meal_categories")
+    side_meals = relationship("DishExtra", back_populates="side_meal_category")
+
+
 class DishExtra(Base):
     __tablename__ = "dishextras"
 
@@ -65,6 +77,8 @@ class DishExtra(Base):
         uuid.uuid4()), primary_key=True, index=True)
     name = Column(String, index=True)
     price = Column(Integer)
+    dish_extra_category_id = Column(
+        String(length=36), ForeignKey('dishextracategories.id'))
 
-    dish_id = Column(String(length=36), ForeignKey('dishes.id'))
-    owner = relationship("Dish", back_populates="side_meal_categories")
+    side_meal_category = relationship(
+        "DishExtraCategory", back_populates="side_meals")
