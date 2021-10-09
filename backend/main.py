@@ -111,9 +111,8 @@ def create_dishes_for_session(session_id: str, dishes: List[schemas.Dish], db: S
             if db_dish:
                 raise HTTPException(
                     status_code=400, detail="Already registered")
-            print("WARN: will ignore manually set id")
-
-        dish.id = uuid.uuid4()
+        else:
+            dish.id = uuid.uuid4()
 
         db_dish = crud.create_dish(db=db, dish=dish)
         db_dish.session_id = session_id
