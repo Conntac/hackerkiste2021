@@ -17,7 +17,8 @@ class User(Base):
     session_id = Column(String(length=36), ForeignKey('sessions.id'))
 
     orders = relationship("Dish", back_populates="ordered_by")
-    in_session = relationship("Session", back_populates="users")
+    in_session = relationship(
+        "Session", back_populates="users", foreign_keys="users.session_id")
     owns = relationship("Session", back_populates="owner")
 
 
@@ -31,8 +32,10 @@ class Session(Base):
     finalized = Column(Boolean)
 
     menu = relationship("Dish", back_populates="belongs_to")
-    owner = relationship("User", back_populates="owns")
-    users = relationship("User", back_populates="in_session")
+    owner = relationship("User", back_populates="owns",
+                         foreign_keys="sessions.owner_id")
+    users = relationship("User", back_populates="in_session",
+                         foreign_keys="users.session_id")
 
 
 class Dish(Base):
