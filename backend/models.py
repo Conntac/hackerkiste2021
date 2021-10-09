@@ -45,8 +45,8 @@ class Dish(Base):
 
     belongs_to = relationship("Session", back_populates="menu")
     ordered_by = relationship("User", back_populates="orders")
-    dishinfos = relationship("DishInfo", back_populates="owner")
-    dishextras = relationship("DishExtra", back_populates="owner")
+    meal_info = relationship("DishInfo", back_populates="owner")
+    side_meal_categories = relationship("DishExtra", back_populates="owner")
 
 
 class DishInfo(Base):
@@ -55,7 +55,7 @@ class DishInfo(Base):
     name = Column(String, primary_key=True, index=True)
 
     dish_id = Column(String(length=36), ForeignKey('dishes.id'))
-    owner = relationship("Dish", back_populates="dishinfos")
+    owner = relationship("Dish", back_populates="meal_info")
 
 
 class DishExtra(Base):
@@ -67,4 +67,4 @@ class DishExtra(Base):
     price = Column(Integer)
 
     dish_id = Column(String(length=36), ForeignKey('dishes.id'))
-    owner = relationship("Dish", back_populates="dishextras")
+    owner = relationship("Dish", back_populates="side_meal_categories")
