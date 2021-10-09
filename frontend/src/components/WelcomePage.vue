@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import store from "../store"
+import { Session } from '@/api/apiTypes'
 
 export default Vue.extend({
   name: "WelcomePage",
@@ -37,12 +37,15 @@ export default Vue.extend({
       valid: false,
     };
   },
+  props: {
+    session: Object as () => Session
+  },
   computed: {
     sessionName() {
-      return "sessionName";
+      return this.session.name;
     },
     ownerName() {
-      return "ownerName";
+      return this.session.organizer.name;
     },
   },
   methods: {
@@ -52,7 +55,7 @@ export default Vue.extend({
       return "Your name can not be empty";
     },
     onSubmit() {
-      store.username = this.name
+      this.$emit('name',  this.name)
     }
   },
 });
