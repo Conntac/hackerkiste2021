@@ -5,22 +5,26 @@ import uuid
 
 from database import Base
 
+
 class User(Base):
     __tablename__ = "users"
 
     # id = Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True, index=True)
-    id = Column(String(length=36), default=lambda: str(uuid.uuid4()), primary_key=True, index=True)
+    id = Column(String(length=36), default=lambda: str(
+        uuid.uuid4()), primary_key=True, index=True)
     name = Column(String, index=True)
 
     session_id = Column(String(length=36), ForeignKey('sessions.id'))
-    
+
     orders = relationship("Dish", back_populates="ordered_by")
     in_session = relationship("Session", back_populates="users")
+
 
 class Session(Base):
     __tablename__ = "sessions"
 
-    id = Column(String(length=36), default=lambda: str(uuid.uuid4()), primary_key=True, index=True)
+    id = Column(String(length=36), default=lambda: str(
+        uuid.uuid4()), primary_key=True, index=True)
 
     menu = relationship("Dish", back_populates="belongs_to")
     users = relationship("User", back_populates="in_session")
@@ -29,7 +33,8 @@ class Session(Base):
 class Dish(Base):
     __tablename__ = "dishes"
 
-    id = Column(String(length=36), default=lambda: str(uuid.uuid4()), primary_key=True, index=True)
+    id = Column(String(length=36), default=lambda: str(
+        uuid.uuid4()), primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(String)
     price = Column(Integer)

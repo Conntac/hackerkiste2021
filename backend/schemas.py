@@ -8,10 +8,11 @@ from database import Base
 class DishInfo(BaseModel):
     __tablename__ = "dishinfos"
 
-    text: str # md
-    
+    text: str  # md
+
     class Config:
         orm_mode = True
+
 
 class DishExtra(BaseModel):
     __tablename__ = "dishextras"
@@ -22,6 +23,7 @@ class DishExtra(BaseModel):
     class Config:
         orm_mode = True
 
+
 class Dish(BaseModel):
     __tablename__ = "dishes"
 
@@ -31,22 +33,24 @@ class Dish(BaseModel):
     price: int
     info: Optional[DishInfo] = None
     extras: List[DishExtra] = []
-    
+
     class Config:
         orm_mode = True
+
 
 class User(BaseModel):
     id: uuid.UUID
     name: str
     orders: List[Dish] = []
-    
+
     class Config:
         orm_mode = True
+
 
 class Session(BaseModel):
     id: uuid.UUID
     menu: List[Dish] = []
     users: List[User] = []
-    
+
     class Config:
         orm_mode = True
