@@ -12,16 +12,14 @@
       <span>{{ username }}</span>
   </v-app-bar>
   <v-content>
-    <WelcomeDialog />
+    <router-view></router-view>
   </v-content>
 </v-app>
 </template>
 
 <script>
-import WelcomeDialog from "./components/WelcomePage";
 export default {
   name: "App",
-  components: { WelcomeDialog },
   data () {
     return {
       'username': "Username"
