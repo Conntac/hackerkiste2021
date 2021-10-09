@@ -33,6 +33,9 @@ def read_root():
 
 @app.post("/users/", response_model=schemas.User)
 def create_user(user: schemas.User, db: Session = Depends(get_db)):
+    db_user = crud.get_user(db, user_id=str(user.id))
+    if db_user:
+        raise HTTPException(status_code=400, detail="Already registered")
     created = crud.create_user(db=db, user=user)
     return None
 
