@@ -3,10 +3,10 @@ import HelloWorld from "./components/HelloWorld.vue";
 import VueRouter from "vue-router";
 
 const routes = [
-  { path: "/", redirect: "name" },
+  { path: "/", redirect: { name: "welcome" } },
   {
     name: "welcome",
-    path: "/",
+    path: "/welcome",
     component: WelcomePage,
   },
   {
