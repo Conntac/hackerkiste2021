@@ -58,9 +58,12 @@ class DishInfo(Base):
 
 
 class DishExtra(Base):
-    __tablename__ = "DishExtra"
+    __tablename__ = "dishextras"
 
-    name = Column(String, primary_key=True, index=True)
+    id = Column(String(length=36), default=lambda: str(
+        uuid.uuid4()), primary_key=True, index=True)
+    name = Column(String, index=True)
+    price = Column(Integer)
 
     dish_id = Column(String(length=36), ForeignKey('dishes.id'))
     owner = relationship("Dish", back_populates="dishextras")

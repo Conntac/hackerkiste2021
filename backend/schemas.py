@@ -17,6 +17,7 @@ class DishInfo(BaseModel):
 class DishExtra(BaseModel):
     __tablename__ = "dishextras"
 
+    id: str
     name: str
     price: int
 
