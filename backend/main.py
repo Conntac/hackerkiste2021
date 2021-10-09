@@ -118,6 +118,15 @@ def read_dishes_for_session(session_id: str, db: Session = Depends(get_db)):
     return crud.get_dishes_for_session(db, session_id=session_id)
 
 
+@app.get("/session/{session_id}/menu/summary")
+def read_summary_for_dishes_for_session(session_id: str, db: Session = Depends(get_db)):
+    dishes = crud.get_dishes_for_session(db, session_id=session_id)
+    dish_sum = 0
+    for dish in dishes:
+        dish_sum += dish.price
+    return {"sum": dish_sum}
+
+
 # @app.post("/dishes/", response_model=schemas.Dish)
 # def create_dish(dish: schemas.Dish, db: Session = Depends(get_db)):
 #     db_dish = crud.get_dish(db, dish_id=str(dish.id))
