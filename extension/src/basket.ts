@@ -1,3 +1,5 @@
+import { resolveModuleName } from "../node_modules/typescript/lib/typescript";
+
 export function inBasket(
     restaurantId: String,
     products: Array<any>,
@@ -12,9 +14,6 @@ export function inBasket(
         "basePricePickup": ${product.price},
         "deliveryType": 2,
         "ignoreMinimumOrderValue": false,
-        "price": ${product.price},
-        "pricePickup": ${product.price},
-        "totalPriceMinimumOrder": ${product.price},
         `;
 
         let prod_mid = ""
@@ -28,39 +27,41 @@ export function inBasket(
                 temp += `
                 {
                     "id": "${dish.id}",
-                    "sideDishName": "${dish.name}"$,
+                    "sideDishName": "${dish.name}",
                     "price" : ${dish.price},
                     "pricePickup": ${dish.price},
-                    "ignoreMinimumOrderVale": false
+                    "ignoreMinimumOrderValue": false
                 },`;
-                uniqueId += `-${dish}`;
+                uniqueId += `-${dish.id}`;
                 totalPrice += dish.price;
             });
             prod_mid = `
             "size": {
                 "sideDishes": [
-                    ${temp.substring(0, temp.length - 2)}
+                    ${temp.substring(0, temp.length - 1)}
                 ],
                 "id": ${product.id},
-                "sizeName": ${product.name},
-                "basePrice": ${product.price},
-                "basePricePickup": ${product.price},
+                "sizeName": "${product.name}",
+                "Price": "${product.price}",
+                "PricePickup": ${product.price},
                 "deliveryType": 2,
                 "ignoreMinimumOrderValue": false
-            }
+            },
             `;
         } else {
             prod_mid = `
             "size": null,
             `;
         }
-        totalPrice *= product.count;
         let prod_end = `
         "uniqueId": "${uniqueId}",
+        "price": ${totalPrice},
+        "pricePickup": ${totalPrice},
+        "totalPriceMinimumOrder": ${totalPrice},
         "baseTotalPrice": ${basePrice},
         "baseTotalPricePickup": ${basePrice},
-        "totalPrice": ${totalPrice},
-        "totalPricePickup": ${totalPrice},
+        "totalPrice": ${totalPrice * product.count},
+        "totalPricePickup": ${totalPrice * product.count},
         "comment": null,
         "isDisabled": false
         `;
@@ -76,7 +77,7 @@ export function inBasket(
     {
         "${restaurantId}": {
            "products": [
-                 ${prod_str.substring(0,prod_str.length - 2)}
+                 ${prod_str.substring(0,prod_str.length - 1)}
            ],
            "voucher": null,
            "paymentMethod": null,
@@ -86,4 +87,6 @@ export function inBasket(
      }`;
     
     localStorage.setItem('basket', str);
+    location.reload()
+
 }
