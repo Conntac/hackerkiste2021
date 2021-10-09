@@ -39,7 +39,7 @@ def read_root():
 
 @app.get("/session/{id}")
 def read_item(id: str):
-    return {"item_id": item_id, "q": q}
+    return {"item_id": id}
 
 
 @app.put("/items/{item_id}")
