@@ -18,8 +18,9 @@ class User(Base):
 
     orders = relationship("Dish", back_populates="ordered_by")
     in_session = relationship(
-        "Session", back_populates="users", foreign_keys="users.session_id")
-    owns = relationship("Session", back_populates="owner")
+        "Session", back_populates="users", foreign_keys="User.session_id")
+    owns = relationship("Session", back_populates="owner",
+                        foreign_keys="Session.owner_id")
 
 
 class Session(Base):
@@ -33,9 +34,9 @@ class Session(Base):
 
     menu = relationship("Dish", back_populates="belongs_to")
     owner = relationship("User", back_populates="owns",
-                         foreign_keys="sessions.owner_id")
+                         foreign_keys="Session.owner_id")
     users = relationship("User", back_populates="in_session",
-                         foreign_keys="users.session_id")
+                         foreign_keys="User.session_id")
 
 
 class Dish(Base):
