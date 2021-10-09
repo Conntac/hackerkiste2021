@@ -90,21 +90,27 @@ def read_users_for_session(session_id: str, db: Session = Depends(get_db)):
 
 
 @app.post("/session/{session_id}/menu", response_model=schemas.Dish)
-def create_dish_for_session(session_id: str, dish: schemas.Dish, db: Session = Depends(get_db)):
-    if dish.id != "":
-        db_dish = crud.get_dish(db, dish_id=dish.id)
-        if db_dish:
-            raise HTTPException(status_code=400, detail="Already registered")
-        print("WARN: will ignore manually set id")
+def create_dishes_for_session(session_id: str, dishes: List[schemas.Dish], db: Session = Depends(get_db)):
+    db_dishes = []
 
-    dish.id = uuid.uuid4()
+    for dish in dishes:
+        if dish.id != "":
+            db_dish = crud.get_dish(db, dish_id=dish.id)
+            if db_dish:
+                raise HTTPException(
+                    status_code=400, detail="Already registered")
+            print("WARN: will ignore manually set id")
 
-    db_dish = crud.create_dish(db=db, dish=dish)
+        dish.id = uuid.uuid4()
 
-    db_dish.session_id = session_id
+        db_dish = crud.create_dish(db=db, dish=dish)
+        db_dish.session_id = session_id
+
+        db_dishes.append(db_dish)
+
     db.commit()
 
-    return db_dish
+    return db_dishes
 
 
 @app.get("/session/{session_id}/menu", response_model=List[schemas.Dish])
@@ -112,18 +118,18 @@ def read_dishes_for_session(session_id: str, db: Session = Depends(get_db)):
     return crud.get_dishes_for_session(db, session_id=session_id)
 
 
-@app.post("/dishes/", response_model=schemas.Dish)
-def create_dish(dish: schemas.Dish, db: Session = Depends(get_db)):
-    db_dish = crud.get_dish(db, dish_id=str(dish.id))
-    if db_dish:
-        raise HTTPException(status_code=400, detail="Already registered")
+# @app.post("/dishes/", response_model=schemas.Dish)
+# def create_dish(dish: schemas.Dish, db: Session = Depends(get_db)):
+#     db_dish = crud.get_dish(db, dish_id=str(dish.id))
+#     if db_dish:
+#         raise HTTPException(status_code=400, detail="Already registered")
 
-    return crud.create_dish(db=db, dish=dish)
+#     return crud.create_dish(db=db, dish=dish)
 
 
-@app.get("/dishes/", response_model=List[schemas.Dish])
-def read_dish(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.get_dishes(db, skip=skip, limit=limit)
+# @app.get("/dishes/", response_model=List[schemas.Dish])
+# def read_dish(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+#     return crud.get_dishes(db, skip=skip, limit=limit)
 
 
 if __name__ == "__main__":
