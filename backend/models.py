@@ -18,6 +18,7 @@ class User(Base):
 
     orders = relationship("Dish", back_populates="ordered_by")
     in_session = relationship("Session", back_populates="users")
+    owns = relationship("Session", back_populates="owner")
 
 
 class Session(Base):
@@ -25,9 +26,12 @@ class Session(Base):
 
     id = Column(String(length=36), default=lambda: str(
         uuid.uuid4()), primary_key=True, index=True)
+    name = Column(String)
+    owner_id = Column(String(length=36), ForeignKey('users.id'))
     finalized = Column(Boolean)
 
     menu = relationship("Dish", back_populates="belongs_to")
+    owner = relationship("User", back_populates="owns")
     users = relationship("User", back_populates="in_session")
 
 

@@ -51,6 +51,8 @@ class User(BaseModel):
 
 class Session(BaseModel):
     id: uuid.UUID
+    name: str
+    owner: User
     menu: List[Dish] = []
     users: List[User] = []
     finalized: bool
