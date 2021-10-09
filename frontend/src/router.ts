@@ -1,5 +1,6 @@
 import WelcomePage from "./components/WelcomePage.vue";
 import HelloWorld from "./components/HelloWorld.vue";
+import OrderPage from "./components/OrderPage.vue";
 import VueRouter from "vue-router";
 
 const routes = [
@@ -13,6 +14,11 @@ const routes = [
     name: "hello",
     path: "/hello",
     component: HelloWorld,
+  },
+  {
+    name: "order",
+    path: "/order",
+    component: OrderPage,
   },
 ];
 
