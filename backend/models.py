@@ -40,6 +40,7 @@ class Dish(Base):
     belongs_to = relationship("Session", back_populates="menu")
     ordered_by = relationship("User", back_populates="orders")
     dishinfos = relationship("DishInfo", back_populates="owner")
+    dishextras = relationship("DishExtra", back_populates="owner")
 
 
 class DishInfo(Base):
@@ -56,4 +57,5 @@ class DishExtra(Base):
 
     name = Column(String, primary_key=True, index=True)
 
-    # extras = relationship("DishExtra", back_populates="owner")
+    dish_id = Column(String(length=36), ForeignKey('dishes.id'))
+    owner = relationship("Dish", back_populates="dishextras")
