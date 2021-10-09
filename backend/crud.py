@@ -66,7 +66,9 @@ def get_dishes(db: Session, skip: int = 0, limit: int = 100):
 def create_dish(db: Session, dish: schemas.Dish):
     db_dish = models.Dish(id=str(dish.id),
                           name=dish.name,
-                          orders=dish.orders
+                          description=dish.description,
+                          price=dish.price,
+                          #   description=dish.description,
                           )
     db.add(db_dish)
     db.commit()
