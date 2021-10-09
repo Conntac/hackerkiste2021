@@ -44,6 +44,11 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 #     return crud.get_dishes_for_user(db, user_id=id)
 
 
+@app.get("/session/", response_model=List[schemas.Session])
+def read_sessions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_sessions(db, skip=skip, limit=limit)
+
+
 @app.get("/session/new", response_model=schemas.Session)
 def create_session(db: Session = Depends(get_db)):
     session = schemas.Session(
@@ -54,7 +59,10 @@ def create_session(db: Session = Depends(get_db)):
 
 @app.get("/session/{session_id}", response_model=schemas.Session)
 def read_session(session_id: str, db: Session = Depends(get_db)):
-    return crud.get_session(db, session_id)
+    session = crud.get_session(db, session_id)
+    if session is None:
+        raise HTTPException(status_code=404)
+    return session
 
 
 @app.post("/session/{session_id}/users", response_model=schemas.User)
@@ -67,7 +75,13 @@ def create_user_for_session(session_id: str, user_name: str, db: Session = Depen
         id=uuid.uuid4(),
         name=user_name
     )
-    return crud.create_user(db=db, user=user)
+
+    db_user = crud.create_user(db=db, user=user)
+
+    db_user.session_id = session_id
+    db.commit()
+
+    return db_user
 
 
 @app.get("/session/{session_id}/users", response_model=List[schemas.Dish])
