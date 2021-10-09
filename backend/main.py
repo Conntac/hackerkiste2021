@@ -34,23 +34,14 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.post("/users/", response_model=schemas.User)
-def create_user(user: schemas.User, db: Session = Depends(get_db)):
-    db_user = crud.get_user(db, user_id=str(user.id))
-    if db_user:
-        raise HTTPException(status_code=400, detail="Already registered")
-
-    return crud.create_user(db=db, user=user)
-
-
 @app.get("/users/", response_model=List[schemas.User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_users(db, skip=skip, limit=limit)
 
 
-@app.get("/session/{id}", response_model=schemas.Session)
-def read_session(id: str, db: Session = Depends(get_db)):
-    return crud.get_session(db, id)
+# @app.get("/users/{id}/dishes", response_model=List[schemas.Dish])
+# def read_dishes_for_user(id: str, db: Session = Depends(get_db)):
+#     return crud.get_dishes_for_user(db, user_id=id)
 
 
 @app.get("/session/new", response_model=schemas.Session)
@@ -59,6 +50,52 @@ def create_session(db: Session = Depends(get_db)):
         id=uuid.uuid4()
     )
     return crud.create_session(db, session)
+
+
+@app.get("/session/{session_id}", response_model=schemas.Session)
+def read_session(session_id: str, db: Session = Depends(get_db)):
+    return crud.get_session(db, session_id)
+
+
+@app.post("/session/{session_id}/users", response_model=schemas.User)
+def create_user_for_session(session_id: str, user_name: str, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_name(db, user_name=user_name)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Already registered")
+
+    user = schemas.User(
+        id=uuid.uuid4(),
+        name=user_name
+    )
+    return crud.create_user(db=db, user=user)
+
+
+@app.get("/session/{session_id}/users", response_model=List[schemas.Dish])
+def read_users_for_session(session_id: str, db: Session = Depends(get_db)):
+    return crud.get_users_for_session(db, session_id=session_id)
+
+
+@app.post("/session/{session_id}/menu", response_model=schemas.Dish)
+def create_dish_for_session(session_id: str, dish: schemas.Dish, db: Session = Depends(get_db)):
+    if dish.id != "":
+        db_dish = crud.get_dish(db, dish_id=dish.id)
+        if db_dish:
+            raise HTTPException(status_code=400, detail="Already registered")
+        print("WARN: will ignore manually set id")
+
+    dish.id = uuid.uuid4()
+
+    db_dish = crud.create_dish(db=db, dish=dish)
+
+    db_dish.session_id = session_id
+    db.commit()
+
+    return db_dish
+
+
+@app.get("/session/{session_id}/menu", response_model=List[schemas.Dish])
+def read_dishes_for_session(session_id: str, db: Session = Depends(get_db)):
+    return crud.get_dishes_for_session(db, session_id=session_id)
 
 
 @app.post("/dishes/", response_model=schemas.Dish)

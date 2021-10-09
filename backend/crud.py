@@ -8,6 +8,22 @@ def get_user(db: Session, user_id: str):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
+def get_dishes_for_user(db: Session, user_id: str):
+    return db.query(models.Dish).filter(models.Dish.ordered_by_userid.id == user_id).all()
+
+
+def get_dishes_for_session(db: Session, session_id: str):
+    return db.query(models.Dish).filter(models.Dish.session_id == session_id).all()
+
+
+def get_users_for_session(db: Session, session_id: str):
+    return db.query(models.User).filter(models.User.session_id == session_id).all()
+
+
+def get_user_by_name(db: Session, user_name: str):
+    return db.query(models.User).filter(models.User.name == user_name).first()
+
+
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
