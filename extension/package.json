@@ -5,6 +5,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/chrome": "^0.0.159",
     "esbuild": "^0.13.4"
   },
   "scripts": {
@@ -12,7 +13,6 @@
     "dev": "node build.js dev"
   },
   "dependencies": {
-    "@types/chrome": "0.0.158",
     "es6-promisify": "^7.0.0",
     "prettier": "^2.4.1",
     "typescript": "^4.4.3"
