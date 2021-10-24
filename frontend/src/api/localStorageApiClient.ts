@@ -16,8 +16,8 @@ export default class LocalStorageApiClient implements ApiClient {
         name: "Organizer",
       },
       menu: [
-        { id: "1", name: "1 Pfund Fritten", price: 690 },
-        { id: "2", name: "Lagerfeuer", price: 1000 },
+        { id: "1", name: "1 Pfund Fritten", description: "3 Gramm mehr als 450 Gramm Fritten!", price: 690 },
+        { id: "2", name: "Lagerfeuer", description: "Möglicherweise etwas scharf", price: 1000 },
         { id: "O51O573031", name: "Menü Avocado", price: 1480 },
       ],
     });
