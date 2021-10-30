@@ -4,5 +4,5 @@ const numberFormatter = new Intl.NumberFormat(undefined, {
 });
 
 export function eurosToString(value: number): string {
-  return numberFormatter.format(value)
+  return numberFormatter.format(value);
 }

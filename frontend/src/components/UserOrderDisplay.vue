@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-space-between">
       <b class="username">{{ user.name }}</b>
-      <span class="total-price">{{eurosToString(totalPrice / 100)}}</span>
+      <span class="total-price">{{ eurosToString(totalPrice / 100) }}</span>
     </div>
     <div class="pl-3 orders">
       <div
@@ -23,8 +23,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import {Meal, User} from "@/api/apiTypes";
-import {eurosToString} from "@/format";
+import { Meal, User } from "@/api/apiTypes";
+import { eurosToString } from "@/format";
 
 export default Vue.extend({
   name: "UserOrderDisplay",
@@ -32,13 +32,16 @@ export default Vue.extend({
     user: Object as PropType<User>,
   },
   methods: {
-    eurosToString
+    eurosToString,
   },
   computed: {
     totalPrice() {
-      return this.user?.orders?.reduce((sum: number, meal: Meal) => sum + meal.price, 0)
-    }
-  }
+      return this.user?.orders?.reduce(
+        (sum: number, meal: Meal) => sum + meal.price,
+        0
+      );
+    },
+  },
 });
 </script>
 
